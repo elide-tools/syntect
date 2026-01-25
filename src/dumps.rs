@@ -17,18 +17,10 @@ use crate::highlighting::ThemeSet;
 #[cfg(feature = "default-syntaxes")]
 use crate::parsing::SyntaxSet;
 #[cfg(feature = "dump-load")]
-use flate2::read::ZlibDecoder;
-#[cfg(feature = "dump-create")]
-use flate2::write::ZlibEncoder;
-#[cfg(feature = "dump-create")]
-use flate2::Compression;
-#[cfg(feature = "dump-load")]
 use serde::de::DeserializeOwned;
 #[cfg(feature = "dump-create")]
 use serde::ser::Serialize;
 use std::fs::File;
-#[cfg(feature = "dump-load")]
-use std::io::Read;
 #[cfg(feature = "dump-create")]
 use std::io::{BufWriter, Write};
 use std::path::Path;
@@ -105,10 +97,10 @@ pub fn dump_to_file<T: Serialize, P: AsRef<Path>>(o: &T, path: P) -> Result<()> 
     dump_to_writer(o, out)
 }
 
-/// A helper function for decoding and decompressing data from a reader
+/// A helper function for decoding and decompressing data from a byte slice
 #[cfg(feature = "dump-load")]
-pub fn from_reader<T: DeserializeOwned, R: Read>(input: R) -> Result<T> {
-    deserialize_from_reader_impl(input, true)
+pub fn from_reader<T: DeserializeOwned>(data: &[u8]) -> Result<T> {
+    deserialize_from_reader_impl(data, true)
 }
 
 /// Returns a fully loaded object from a binary dump.
@@ -161,9 +153,8 @@ fn serialize_to_writer_impl<T: Serialize, W: Write>(
 ) -> Result<()> {
     let encoded = bitcode::serialize(to_dump)?;
     if use_compression {
-        let mut encoder = ZlibEncoder::new(&mut output, Compression::best());
-        encoder.write_all(&encoded)?;
-        encoder.finish()?;
+        let compressed = crate::compression::compress(&encoded)?;
+        output.write_all(&compressed)?;
     } else {
         output.write_all(&encoded)?;
     }
@@ -172,22 +163,87 @@ fn serialize_to_writer_impl<T: Serialize, W: Write>(
 
 /// Private low level helper function used to implement the public API.
 #[cfg(feature = "dump-load")]
-fn deserialize_from_reader_impl<T: DeserializeOwned, R: Read>(
-    input: R,
+fn deserialize_from_reader_impl<T: DeserializeOwned>(
+    data: &[u8],
     use_compression: bool,
 ) -> Result<T> {
     let bytes = if use_compression {
-        let mut decoder = ZlibDecoder::new(input);
-        let mut bytes = Vec::new();
-        decoder.read_to_end(&mut bytes)?;
-        bytes
+        crate::compression::decompress(data)?
     } else {
-        let mut bytes = Vec::new();
-        let mut input = input;
-        input.read_to_end(&mut bytes)?;
-        bytes
+        data.to_vec()
     };
     Ok(bitcode::deserialize(&bytes)?)
+}
+
+// Macros to select the correct packdump based on compression backend
+// Priority: zstd > lz4 > flate2
+#[cfg(feature = "compression-zstd")]
+macro_rules! default_newlines_packdump {
+    () => {
+        include_bytes!("../assets/default_newlines.zstd.packdump")
+    };
+}
+#[cfg(all(feature = "compression-lz4", not(feature = "compression-zstd")))]
+macro_rules! default_newlines_packdump {
+    () => {
+        include_bytes!("../assets/default_newlines.lz4.packdump")
+    };
+}
+#[cfg(all(
+    feature = "compression-flate2",
+    not(feature = "compression-zstd"),
+    not(feature = "compression-lz4")
+))]
+macro_rules! default_newlines_packdump {
+    () => {
+        include_bytes!("../assets/default_newlines.flate2.packdump")
+    };
+}
+
+#[cfg(feature = "compression-zstd")]
+macro_rules! default_nonewlines_packdump {
+    () => {
+        include_bytes!("../assets/default_nonewlines.zstd.packdump")
+    };
+}
+#[cfg(all(feature = "compression-lz4", not(feature = "compression-zstd")))]
+macro_rules! default_nonewlines_packdump {
+    () => {
+        include_bytes!("../assets/default_nonewlines.lz4.packdump")
+    };
+}
+#[cfg(all(
+    feature = "compression-flate2",
+    not(feature = "compression-zstd"),
+    not(feature = "compression-lz4")
+))]
+macro_rules! default_nonewlines_packdump {
+    () => {
+        include_bytes!("../assets/default_nonewlines.flate2.packdump")
+    };
+}
+
+#[cfg(feature = "compression-zstd")]
+macro_rules! default_themedump {
+    () => {
+        include_bytes!("../assets/default.zstd.themedump")
+    };
+}
+#[cfg(all(feature = "compression-lz4", not(feature = "compression-zstd")))]
+macro_rules! default_themedump {
+    () => {
+        include_bytes!("../assets/default.lz4.themedump")
+    };
+}
+#[cfg(all(
+    feature = "compression-flate2",
+    not(feature = "compression-zstd"),
+    not(feature = "compression-lz4")
+))]
+macro_rules! default_themedump {
+    () => {
+        include_bytes!("../assets/default.flate2.themedump")
+    };
 }
 
 #[cfg(feature = "default-syntaxes")]
@@ -215,15 +271,14 @@ impl SyntaxSet {
         #[cfg(feature = "metadata")]
         {
             let mut ps: SyntaxSet =
-                from_uncompressed_data(include_bytes!("../assets/default_nonewlines.packdump"))
-                    .unwrap();
+                from_uncompressed_data(default_nonewlines_packdump!()).unwrap();
             let metadata = from_binary(include_bytes!("../assets/default_metadata.packdump"));
             ps.metadata = metadata;
             ps
         }
         #[cfg(not(feature = "metadata"))]
         {
-            from_uncompressed_data(include_bytes!("../assets/default_nonewlines.packdump")).unwrap()
+            from_uncompressed_data(default_nonewlines_packdump!()).unwrap()
         }
     }
 
@@ -236,16 +291,14 @@ impl SyntaxSet {
     pub fn load_defaults_newlines() -> SyntaxSet {
         #[cfg(feature = "metadata")]
         {
-            let mut ps: SyntaxSet =
-                from_uncompressed_data(include_bytes!("../assets/default_newlines.packdump"))
-                    .unwrap();
+            let mut ps: SyntaxSet = from_uncompressed_data(default_newlines_packdump!()).unwrap();
             let metadata = from_binary(include_bytes!("../assets/default_metadata.packdump"));
             ps.metadata = metadata;
             ps
         }
         #[cfg(not(feature = "metadata"))]
         {
-            from_uncompressed_data(include_bytes!("../assets/default_newlines.packdump")).unwrap()
+            from_uncompressed_data(default_newlines_packdump!()).unwrap()
         }
     }
 }
@@ -259,7 +312,7 @@ impl ThemeSet {
     /// - `InspiredGitHub` from [here](https://github.com/sethlopezme/InspiredGitHub.tmtheme)
     /// - `Solarized (dark)` and `Solarized (light)`
     pub fn load_defaults() -> ThemeSet {
-        from_binary(include_bytes!("../assets/default.themedump"))
+        from_binary(default_themedump!())
     }
 }
 

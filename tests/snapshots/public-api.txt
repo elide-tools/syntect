@@ -1,4 +1,9 @@
 pub mod syntect
+pub mod syntect::compression
+pub fn syntect::compression::compress(data: &[u8]) -> std::io::error::Result<alloc::vec::Vec<u8>>
+pub fn syntect::compression::compress_no_dict(data: &[u8]) -> std::io::error::Result<alloc::vec::Vec<u8>>
+pub fn syntect::compression::decompress(data: &[u8]) -> std::io::error::Result<alloc::vec::Vec<u8>>
+pub fn syntect::compression::decompress_no_dict(data: &[u8]) -> std::io::error::Result<alloc::vec::Vec<u8>>
 pub mod syntect::dumps
 pub enum syntect::dumps::Error
 pub syntect::dumps::Error::Bitcode(bitcode::error::Error)
@@ -25,7 +30,7 @@ pub fn syntect::dumps::dump_to_uncompressed_file<T: serde_core::ser::Serialize, 
 pub fn syntect::dumps::dump_to_writer<T: serde_core::ser::Serialize, W: std::io::Write>(to_dump: &T, output: W) -> syntect::dumps::Result<()>
 pub fn syntect::dumps::from_binary<T: serde_core::de::DeserializeOwned>(v: &[u8]) -> T
 pub fn syntect::dumps::from_dump_file<T: serde_core::de::DeserializeOwned, P: core::convert::AsRef<std::path::Path>>(path: P) -> syntect::dumps::Result<T>
-pub fn syntect::dumps::from_reader<T: serde_core::de::DeserializeOwned, R: std::io::Read>(input: R) -> syntect::dumps::Result<T>
+pub fn syntect::dumps::from_reader<T: serde_core::de::DeserializeOwned>(data: &[u8]) -> syntect::dumps::Result<T>
 pub fn syntect::dumps::from_uncompressed_data<T: serde_core::de::DeserializeOwned>(v: &[u8]) -> syntect::dumps::Result<T>
 pub fn syntect::dumps::from_uncompressed_dump_file<T: serde_core::de::DeserializeOwned, P: core::convert::AsRef<std::path::Path>>(path: P) -> syntect::dumps::Result<T>
 pub type syntect::dumps::Result<T> = core::result::Result<T, syntect::dumps::Error>
@@ -1194,6 +1199,8 @@ pub syntect::parsing::SyntaxReference::hidden: bool
 pub syntect::parsing::SyntaxReference::name: alloc::string::String
 pub syntect::parsing::SyntaxReference::scope: syntect::parsing::Scope
 pub syntect::parsing::SyntaxReference::variables: std::collections::hash::map::HashMap<alloc::string::String, alloc::string::String>
+impl syntect::parsing::SyntaxReference
+pub fn syntect::parsing::SyntaxReference::serialized_contexts(&self) -> &[u8]
 impl core::clone::Clone for syntect::parsing::SyntaxReference
 pub fn syntect::parsing::SyntaxReference::clone(&self) -> syntect::parsing::SyntaxReference
 impl core::fmt::Debug for syntect::parsing::SyntaxReference
