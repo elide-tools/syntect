@@ -16,9 +16,7 @@ fn bench_compress(b: &mut Bencher) {
     // Sample data similar to syntax definitions
     let data = br#"{"contexts":[{"meta_scope":"source.rust","patterns":[{"match":"\\b(fn|let|mut|const|static)\\b","scope":"keyword.declaration"}]}]}"#.repeat(50);
 
-    b.iter(|| {
-        syntect::compression::compress(&data).unwrap()
-    });
+    b.iter(|| syntect::compression::compress(&data).unwrap());
 }
 
 #[cfg(any(
@@ -30,9 +28,7 @@ fn bench_decompress(b: &mut Bencher) {
     let data = br#"{"contexts":[{"meta_scope":"source.rust","patterns":[{"match":"\\b(fn|let|mut|const|static)\\b","scope":"keyword.declaration"}]}]}"#.repeat(50);
     let compressed = syntect::compression::compress(&data).unwrap();
 
-    b.iter(|| {
-        syntect::compression::decompress(&compressed).unwrap()
-    });
+    b.iter(|| syntect::compression::decompress(&compressed).unwrap());
 }
 
 #[cfg(any(
@@ -42,9 +38,7 @@ fn bench_decompress(b: &mut Bencher) {
 ))]
 fn bench_load_defaults(b: &mut Bencher) {
     use syntect::parsing::SyntaxSet;
-    b.iter(|| {
-        SyntaxSet::load_defaults_newlines()
-    });
+    b.iter(|| SyntaxSet::load_defaults_newlines());
 }
 
 #[cfg(any(

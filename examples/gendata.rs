@@ -46,7 +46,10 @@ fn extract_training_samples(package_dir: &str) -> Vec<Vec<u8>> {
         }
     }
 
-    println!("Extracted {} samples for dictionary training", samples.len());
+    println!(
+        "Extracted {} samples for dictionary training",
+        samples.len()
+    );
     samples
 }
 
@@ -110,7 +113,11 @@ fn main() {
                     Ok(dict) => {
                         let mut f = File::create(zstd_path).unwrap();
                         f.write_all(&dict).unwrap();
-                        println!("Saved zstd dictionary to {} ({} bytes)", zstd_path, dict.len());
+                        println!(
+                            "Saved zstd dictionary to {} ({} bytes)",
+                            zstd_path,
+                            dict.len()
+                        );
                     }
                     Err(e) => {
                         eprintln!("Failed to train zstd dictionary: {}", e);
@@ -131,7 +138,11 @@ fn main() {
                 let dict = syntect::compression::train_lz4_dictionary(&samples, dict_size);
                 let mut f = File::create(lz4_path).unwrap();
                 f.write_all(&dict).unwrap();
-                println!("Saved lz4 dictionary to {} ({} bytes)", lz4_path, dict.len());
+                println!(
+                    "Saved lz4 dictionary to {} ({} bytes)",
+                    lz4_path,
+                    dict.len()
+                );
             }
             #[cfg(not(feature = "compression-lz4"))]
             {

@@ -270,8 +270,7 @@ impl SyntaxSet {
     pub fn load_defaults_nonewlines() -> SyntaxSet {
         #[cfg(feature = "metadata")]
         {
-            let mut ps: SyntaxSet =
-                from_uncompressed_data(default_nonewlines_packdump!()).unwrap();
+            let mut ps: SyntaxSet = from_uncompressed_data(default_nonewlines_packdump!()).unwrap();
             let metadata = from_binary(include_bytes!("../assets/default_metadata.packdump"));
             ps.metadata = metadata;
             ps

@@ -25,7 +25,11 @@
 #[macro_use]
 extern crate pretty_assertions;
 
-#[cfg(any(feature = "compression-flate2", feature = "compression-zstd", feature = "compression-lz4"))]
+#[cfg(any(
+    feature = "compression-flate2",
+    feature = "compression-zstd",
+    feature = "compression-lz4"
+))]
 pub mod compression;
 #[cfg(any(feature = "dump-load", feature = "dump-create"))]
 pub mod dumps;

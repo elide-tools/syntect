@@ -255,7 +255,11 @@ mod tests {
         assert_eq!(data.as_slice(), decompressed.as_slice());
     }
 
-    #[cfg(all(feature = "compression-zstd", feature = "dump-create", feature = "dump-load"))]
+    #[cfg(all(
+        feature = "compression-zstd",
+        feature = "dump-create",
+        feature = "dump-load"
+    ))]
     #[test]
     fn zstd_roundtrip_no_dict() {
         let data = b"Hello, world! This is test data for compression.".repeat(100);
