@@ -17,12 +17,7 @@ use crate::highlighting::ThemeSet;
 #[cfg(feature = "default-syntaxes")]
 use crate::parsing::SyntaxSet;
 #[cfg(feature = "dump-load")]
-use bincode::deserialize_from;
-#[cfg(feature = "dump-create")]
-use bincode::serialize_into;
-use bincode::Result;
-#[cfg(feature = "dump-load")]
-use flate2::bufread::ZlibDecoder;
+use flate2::read::ZlibDecoder;
 #[cfg(feature = "dump-create")]
 use flate2::write::ZlibEncoder;
 #[cfg(feature = "dump-create")]
@@ -33,14 +28,56 @@ use serde::de::DeserializeOwned;
 use serde::ser::Serialize;
 use std::fs::File;
 #[cfg(feature = "dump-load")]
-use std::io::BufRead;
+use std::io::Read;
 #[cfg(feature = "dump-create")]
 use std::io::{BufWriter, Write};
 use std::path::Path;
 
+/// Error type for dump operations.
+#[derive(Debug)]
+pub enum Error {
+    /// An I/O error occurred.
+    Io(std::io::Error),
+    /// A serialization/deserialization error occurred.
+    Bitcode(bitcode::Error),
+}
+
+impl std::fmt::Display for Error {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Error::Io(e) => write!(f, "I/O error: {}", e),
+            Error::Bitcode(e) => write!(f, "bitcode error: {}", e),
+        }
+    }
+}
+
+impl std::error::Error for Error {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        match self {
+            Error::Io(e) => Some(e),
+            Error::Bitcode(e) => Some(e),
+        }
+    }
+}
+
+impl From<std::io::Error> for Error {
+    fn from(e: std::io::Error) -> Self {
+        Error::Io(e)
+    }
+}
+
+impl From<bitcode::Error> for Error {
+    fn from(e: bitcode::Error) -> Self {
+        Error::Bitcode(e)
+    }
+}
+
+/// Result type for dump operations.
+pub type Result<T> = std::result::Result<T, Error>;
+
 /// Dumps an object to the given writer in a compressed binary format
 ///
-/// The writer is encoded with the `bincode` crate and compressed with `flate2`.
+/// The writer is encoded with the `bitcode` crate and compressed with `flate2`.
 #[cfg(feature = "dump-create")]
 pub fn dump_to_writer<T: Serialize, W: Write>(to_dump: &T, output: W) -> Result<()> {
     serialize_to_writer_impl(to_dump, output, true)
@@ -59,7 +96,7 @@ pub fn dump_binary<T: Serialize>(o: &T) -> Vec<u8> {
 /// Dumps an encodable object to a file at a given path, in the same format as [`dump_to_writer`]
 ///
 /// If a file already exists at that path it will be overwritten. The files created are encoded with
-/// the `bincode` crate and then compressed with the `flate2` crate.
+/// the `bitcode` crate and then compressed with the `flate2` crate.
 ///
 /// [`dump_to_writer`]: fn.dump_to_writer.html
 #[cfg(feature = "dump-create")]
@@ -70,7 +107,7 @@ pub fn dump_to_file<T: Serialize, P: AsRef<Path>>(o: &T, path: P) -> Result<()> 
 
 /// A helper function for decoding and decompressing data from a reader
 #[cfg(feature = "dump-load")]
-pub fn from_reader<T: DeserializeOwned, R: BufRead>(input: R) -> Result<T> {
+pub fn from_reader<T: DeserializeOwned, R: Read>(input: R) -> Result<T> {
     deserialize_from_reader_impl(input, true)
 }
 
@@ -119,29 +156,38 @@ pub fn from_uncompressed_data<T: DeserializeOwned>(v: &[u8]) -> Result<T> {
 #[cfg(feature = "dump-create")]
 fn serialize_to_writer_impl<T: Serialize, W: Write>(
     to_dump: &T,
-    output: W,
+    mut output: W,
     use_compression: bool,
 ) -> Result<()> {
+    let encoded = bitcode::serialize(to_dump)?;
     if use_compression {
-        let mut encoder = std::io::BufWriter::new(ZlibEncoder::new(output, Compression::best()));
-        serialize_into(&mut encoder, to_dump)
+        let mut encoder = ZlibEncoder::new(&mut output, Compression::best());
+        encoder.write_all(&encoded)?;
+        encoder.finish()?;
     } else {
-        serialize_into(output, to_dump)
+        output.write_all(&encoded)?;
     }
+    Ok(())
 }
 
 /// Private low level helper function used to implement the public API.
 #[cfg(feature = "dump-load")]
-fn deserialize_from_reader_impl<T: DeserializeOwned, R: BufRead>(
+fn deserialize_from_reader_impl<T: DeserializeOwned, R: Read>(
     input: R,
     use_compression: bool,
 ) -> Result<T> {
-    if use_compression {
+    let bytes = if use_compression {
         let mut decoder = ZlibDecoder::new(input);
-        deserialize_from(&mut decoder)
+        let mut bytes = Vec::new();
+        decoder.read_to_end(&mut bytes)?;
+        bytes
     } else {
-        deserialize_from(input)
-    }
+        let mut bytes = Vec::new();
+        let mut input = input;
+        input.read_to_end(&mut bytes)?;
+        bytes
+    };
+    Ok(bitcode::deserialize(&bytes)?)
 }
 
 #[cfg(feature = "default-syntaxes")]
@@ -160,7 +206,7 @@ impl SyntaxSet {
     /// significantly faster than loading the YAML files.
     ///
     /// Note that you can load additional syntaxes after doing this. If you want you can even use
-    /// the fact that SyntaxDefinitions are serializable with the bincode crate to cache dumps of
+    /// the fact that SyntaxDefinitions are serializable with the bitcode crate to cache dumps of
     /// additional syntaxes yourself.
     ///
     /// [`load_defaults_newlines`]: #method.load_defaults_nonewlines
