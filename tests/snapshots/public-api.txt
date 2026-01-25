@@ -19,15 +19,15 @@ impl core::marker::Sync for syntect::dumps::Error
 impl core::marker::Unpin for syntect::dumps::Error
 impl !core::panic::unwind_safe::RefUnwindSafe for syntect::dumps::Error
 impl !core::panic::unwind_safe::UnwindSafe for syntect::dumps::Error
-pub fn syntect::dumps::dump_binary<T: serde::ser::Serialize>(o: &T) -> alloc::vec::Vec<u8>
-pub fn syntect::dumps::dump_to_file<T: serde::ser::Serialize, P: core::convert::AsRef<std::path::Path>>(o: &T, path: P) -> syntect::dumps::Result<()>
-pub fn syntect::dumps::dump_to_uncompressed_file<T: serde::ser::Serialize, P: core::convert::AsRef<std::path::Path>>(o: &T, path: P) -> syntect::dumps::Result<()>
-pub fn syntect::dumps::dump_to_writer<T: serde::ser::Serialize, W: std::io::Write>(to_dump: &T, output: W) -> syntect::dumps::Result<()>
-pub fn syntect::dumps::from_binary<T: serde::de::DeserializeOwned>(v: &[u8]) -> T
-pub fn syntect::dumps::from_dump_file<T: serde::de::DeserializeOwned, P: core::convert::AsRef<std::path::Path>>(path: P) -> syntect::dumps::Result<T>
-pub fn syntect::dumps::from_reader<T: serde::de::DeserializeOwned, R: std::io::Read>(input: R) -> syntect::dumps::Result<T>
-pub fn syntect::dumps::from_uncompressed_data<T: serde::de::DeserializeOwned>(v: &[u8]) -> syntect::dumps::Result<T>
-pub fn syntect::dumps::from_uncompressed_dump_file<T: serde::de::DeserializeOwned, P: core::convert::AsRef<std::path::Path>>(path: P) -> syntect::dumps::Result<T>
+pub fn syntect::dumps::dump_binary<T: serde_core::ser::Serialize>(o: &T) -> alloc::vec::Vec<u8>
+pub fn syntect::dumps::dump_to_file<T: serde_core::ser::Serialize, P: core::convert::AsRef<std::path::Path>>(o: &T, path: P) -> syntect::dumps::Result<()>
+pub fn syntect::dumps::dump_to_uncompressed_file<T: serde_core::ser::Serialize, P: core::convert::AsRef<std::path::Path>>(o: &T, path: P) -> syntect::dumps::Result<()>
+pub fn syntect::dumps::dump_to_writer<T: serde_core::ser::Serialize, W: std::io::Write>(to_dump: &T, output: W) -> syntect::dumps::Result<()>
+pub fn syntect::dumps::from_binary<T: serde_core::de::DeserializeOwned>(v: &[u8]) -> T
+pub fn syntect::dumps::from_dump_file<T: serde_core::de::DeserializeOwned, P: core::convert::AsRef<std::path::Path>>(path: P) -> syntect::dumps::Result<T>
+pub fn syntect::dumps::from_reader<T: serde_core::de::DeserializeOwned, R: std::io::Read>(input: R) -> syntect::dumps::Result<T>
+pub fn syntect::dumps::from_uncompressed_data<T: serde_core::de::DeserializeOwned>(v: &[u8]) -> syntect::dumps::Result<T>
+pub fn syntect::dumps::from_uncompressed_dump_file<T: serde_core::de::DeserializeOwned, P: core::convert::AsRef<std::path::Path>>(path: P) -> syntect::dumps::Result<T>
 pub type syntect::dumps::Result<T> = core::result::Result<T, syntect::dumps::Error>
 pub mod syntect::easy
 pub struct syntect::easy::HighlightFile<'a>
@@ -146,10 +146,10 @@ impl core::marker::StructuralPartialEq for syntect::highlighting::UnderlineOptio
 impl core::str::traits::FromStr for syntect::highlighting::UnderlineOption
 pub type syntect::highlighting::UnderlineOption::Err = syntect::highlighting::ParseThemeError
 pub fn syntect::highlighting::UnderlineOption::from_str(s: &str) -> core::result::Result<syntect::highlighting::UnderlineOption, Self::Err>
-impl serde::ser::Serialize for syntect::highlighting::UnderlineOption
-pub fn syntect::highlighting::UnderlineOption::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::highlighting::UnderlineOption
-pub fn syntect::highlighting::UnderlineOption::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::highlighting::UnderlineOption
+pub fn syntect::highlighting::UnderlineOption::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::highlighting::UnderlineOption
+pub fn syntect::highlighting::UnderlineOption::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl core::marker::Freeze for syntect::highlighting::UnderlineOption
 impl core::marker::Send for syntect::highlighting::UnderlineOption
 impl core::marker::Sync for syntect::highlighting::UnderlineOption
@@ -178,10 +178,10 @@ impl core::marker::StructuralPartialEq for syntect::highlighting::Color
 impl core::str::traits::FromStr for syntect::highlighting::Color
 pub type syntect::highlighting::Color::Err = syntect::highlighting::ParseThemeError
 pub fn syntect::highlighting::Color::from_str(s: &str) -> core::result::Result<syntect::highlighting::Color, Self::Err>
-impl serde::ser::Serialize for syntect::highlighting::Color
-pub fn syntect::highlighting::Color::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::highlighting::Color
-pub fn syntect::highlighting::Color::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::highlighting::Color
+pub fn syntect::highlighting::Color::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::highlighting::Color
+pub fn syntect::highlighting::Color::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl core::marker::Freeze for syntect::highlighting::Color
 impl core::marker::Send for syntect::highlighting::Color
 impl core::marker::Sync for syntect::highlighting::Color
@@ -267,10 +267,10 @@ pub fn syntect::highlighting::FontStyle::not(self) -> Self
 impl core::str::traits::FromStr for syntect::highlighting::FontStyle
 pub type syntect::highlighting::FontStyle::Err = syntect::highlighting::ParseThemeError
 pub fn syntect::highlighting::FontStyle::from_str(s: &str) -> core::result::Result<syntect::highlighting::FontStyle, Self::Err>
-impl serde::ser::Serialize for syntect::highlighting::FontStyle
-pub fn syntect::highlighting::FontStyle::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::highlighting::FontStyle
-pub fn syntect::highlighting::FontStyle::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::highlighting::FontStyle
+pub fn syntect::highlighting::FontStyle::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::highlighting::FontStyle
+pub fn syntect::highlighting::FontStyle::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl core::marker::Freeze for syntect::highlighting::FontStyle
 impl core::marker::Send for syntect::highlighting::FontStyle
 impl core::marker::Sync for syntect::highlighting::FontStyle
@@ -357,10 +357,10 @@ impl core::marker::StructuralPartialEq for syntect::highlighting::ScopeSelector
 impl core::str::traits::FromStr for syntect::highlighting::ScopeSelector
 pub type syntect::highlighting::ScopeSelector::Err = syntect::parsing::ParseScopeError
 pub fn syntect::highlighting::ScopeSelector::from_str(s: &str) -> core::result::Result<syntect::highlighting::ScopeSelector, syntect::parsing::ParseScopeError>
-impl serde::ser::Serialize for syntect::highlighting::ScopeSelector
-pub fn syntect::highlighting::ScopeSelector::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::highlighting::ScopeSelector
-pub fn syntect::highlighting::ScopeSelector::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::highlighting::ScopeSelector
+pub fn syntect::highlighting::ScopeSelector::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::highlighting::ScopeSelector
+pub fn syntect::highlighting::ScopeSelector::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl core::marker::Freeze for syntect::highlighting::ScopeSelector
 impl core::marker::Send for syntect::highlighting::ScopeSelector
 impl core::marker::Sync for syntect::highlighting::ScopeSelector
@@ -384,10 +384,10 @@ impl core::marker::StructuralPartialEq for syntect::highlighting::ScopeSelectors
 impl core::str::traits::FromStr for syntect::highlighting::ScopeSelectors
 pub type syntect::highlighting::ScopeSelectors::Err = syntect::parsing::ParseScopeError
 pub fn syntect::highlighting::ScopeSelectors::from_str(s: &str) -> core::result::Result<syntect::highlighting::ScopeSelectors, syntect::parsing::ParseScopeError>
-impl serde::ser::Serialize for syntect::highlighting::ScopeSelectors
-pub fn syntect::highlighting::ScopeSelectors::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::highlighting::ScopeSelectors
-pub fn syntect::highlighting::ScopeSelectors::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::highlighting::ScopeSelectors
+pub fn syntect::highlighting::ScopeSelectors::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::highlighting::ScopeSelectors
+pub fn syntect::highlighting::ScopeSelectors::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl core::marker::Freeze for syntect::highlighting::ScopeSelectors
 impl core::marker::Send for syntect::highlighting::ScopeSelectors
 impl core::marker::Sync for syntect::highlighting::ScopeSelectors
@@ -431,10 +431,10 @@ impl core::hash::Hash for syntect::highlighting::Style
 pub fn syntect::highlighting::Style::hash<__H: core::hash::Hasher>(&self, state: &mut __H)
 impl core::marker::Copy for syntect::highlighting::Style
 impl core::marker::StructuralPartialEq for syntect::highlighting::Style
-impl serde::ser::Serialize for syntect::highlighting::Style
-pub fn syntect::highlighting::Style::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::highlighting::Style
-pub fn syntect::highlighting::Style::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::highlighting::Style
+pub fn syntect::highlighting::Style::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::highlighting::Style
+pub fn syntect::highlighting::Style::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl core::marker::Freeze for syntect::highlighting::Style
 impl core::marker::Send for syntect::highlighting::Style
 impl core::marker::Sync for syntect::highlighting::Style
@@ -458,10 +458,10 @@ impl core::fmt::Debug for syntect::highlighting::StyleModifier
 pub fn syntect::highlighting::StyleModifier::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 impl core::marker::Copy for syntect::highlighting::StyleModifier
 impl core::marker::StructuralPartialEq for syntect::highlighting::StyleModifier
-impl serde::ser::Serialize for syntect::highlighting::StyleModifier
-pub fn syntect::highlighting::StyleModifier::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::highlighting::StyleModifier
-pub fn syntect::highlighting::StyleModifier::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::highlighting::StyleModifier
+pub fn syntect::highlighting::StyleModifier::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::highlighting::StyleModifier
+pub fn syntect::highlighting::StyleModifier::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl core::marker::Freeze for syntect::highlighting::StyleModifier
 impl core::marker::Send for syntect::highlighting::StyleModifier
 impl core::marker::Sync for syntect::highlighting::StyleModifier
@@ -482,10 +482,10 @@ pub fn syntect::highlighting::Theme::default() -> syntect::highlighting::Theme
 impl core::fmt::Debug for syntect::highlighting::Theme
 pub fn syntect::highlighting::Theme::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 impl core::marker::StructuralPartialEq for syntect::highlighting::Theme
-impl serde::ser::Serialize for syntect::highlighting::Theme
-pub fn syntect::highlighting::Theme::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::highlighting::Theme
-pub fn syntect::highlighting::Theme::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::highlighting::Theme
+pub fn syntect::highlighting::Theme::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::highlighting::Theme
+pub fn syntect::highlighting::Theme::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl core::marker::Freeze for syntect::highlighting::Theme
 impl core::marker::Send for syntect::highlighting::Theme
 impl core::marker::Sync for syntect::highlighting::Theme
@@ -504,10 +504,10 @@ pub fn syntect::highlighting::ThemeItem::default() -> syntect::highlighting::The
 impl core::fmt::Debug for syntect::highlighting::ThemeItem
 pub fn syntect::highlighting::ThemeItem::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 impl core::marker::StructuralPartialEq for syntect::highlighting::ThemeItem
-impl serde::ser::Serialize for syntect::highlighting::ThemeItem
-pub fn syntect::highlighting::ThemeItem::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::highlighting::ThemeItem
-pub fn syntect::highlighting::ThemeItem::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::highlighting::ThemeItem
+pub fn syntect::highlighting::ThemeItem::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::highlighting::ThemeItem
+pub fn syntect::highlighting::ThemeItem::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl core::marker::Freeze for syntect::highlighting::ThemeItem
 impl core::marker::Send for syntect::highlighting::ThemeItem
 impl core::marker::Sync for syntect::highlighting::ThemeItem
@@ -529,10 +529,10 @@ impl core::default::Default for syntect::highlighting::ThemeSet
 pub fn syntect::highlighting::ThemeSet::default() -> syntect::highlighting::ThemeSet
 impl core::fmt::Debug for syntect::highlighting::ThemeSet
 pub fn syntect::highlighting::ThemeSet::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-impl serde::ser::Serialize for syntect::highlighting::ThemeSet
-pub fn syntect::highlighting::ThemeSet::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::highlighting::ThemeSet
-pub fn syntect::highlighting::ThemeSet::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::highlighting::ThemeSet
+pub fn syntect::highlighting::ThemeSet::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::highlighting::ThemeSet
+pub fn syntect::highlighting::ThemeSet::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl core::marker::Freeze for syntect::highlighting::ThemeSet
 impl core::marker::Send for syntect::highlighting::ThemeSet
 impl core::marker::Sync for syntect::highlighting::ThemeSet
@@ -579,10 +579,10 @@ pub fn syntect::highlighting::ThemeSettings::default() -> syntect::highlighting:
 impl core::fmt::Debug for syntect::highlighting::ThemeSettings
 pub fn syntect::highlighting::ThemeSettings::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 impl core::marker::StructuralPartialEq for syntect::highlighting::ThemeSettings
-impl serde::ser::Serialize for syntect::highlighting::ThemeSettings
-pub fn syntect::highlighting::ThemeSettings::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::highlighting::ThemeSettings
-pub fn syntect::highlighting::ThemeSettings::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::highlighting::ThemeSettings
+pub fn syntect::highlighting::ThemeSettings::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::highlighting::ThemeSettings
+pub fn syntect::highlighting::ThemeSettings::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl core::marker::Freeze for syntect::highlighting::ThemeSettings
 impl core::marker::Send for syntect::highlighting::ThemeSettings
 impl core::marker::Sync for syntect::highlighting::ThemeSettings
@@ -676,10 +676,10 @@ pub fn syntect::parsing::syntax_definition::ContextReference::eq(&self, other: &
 impl core::fmt::Debug for syntect::parsing::syntax_definition::ContextReference
 pub fn syntect::parsing::syntax_definition::ContextReference::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 impl core::marker::StructuralPartialEq for syntect::parsing::syntax_definition::ContextReference
-impl serde::ser::Serialize for syntect::parsing::syntax_definition::ContextReference
-pub fn syntect::parsing::syntax_definition::ContextReference::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::parsing::syntax_definition::ContextReference
-pub fn syntect::parsing::syntax_definition::ContextReference::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::parsing::syntax_definition::ContextReference
+pub fn syntect::parsing::syntax_definition::ContextReference::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::parsing::syntax_definition::ContextReference
+pub fn syntect::parsing::syntax_definition::ContextReference::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl core::marker::Freeze for syntect::parsing::syntax_definition::ContextReference
 impl core::marker::Send for syntect::parsing::syntax_definition::ContextReference
 impl core::marker::Sync for syntect::parsing::syntax_definition::ContextReference
@@ -699,10 +699,10 @@ pub fn syntect::parsing::syntax_definition::MatchOperation::eq(&self, other: &sy
 impl core::fmt::Debug for syntect::parsing::syntax_definition::MatchOperation
 pub fn syntect::parsing::syntax_definition::MatchOperation::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 impl core::marker::StructuralPartialEq for syntect::parsing::syntax_definition::MatchOperation
-impl serde::ser::Serialize for syntect::parsing::syntax_definition::MatchOperation
-pub fn syntect::parsing::syntax_definition::MatchOperation::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::parsing::syntax_definition::MatchOperation
-pub fn syntect::parsing::syntax_definition::MatchOperation::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::parsing::syntax_definition::MatchOperation
+pub fn syntect::parsing::syntax_definition::MatchOperation::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::parsing::syntax_definition::MatchOperation
+pub fn syntect::parsing::syntax_definition::MatchOperation::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl core::marker::Freeze for syntect::parsing::syntax_definition::MatchOperation
 impl core::marker::Send for syntect::parsing::syntax_definition::MatchOperation
 impl core::marker::Sync for syntect::parsing::syntax_definition::MatchOperation
@@ -720,10 +720,10 @@ pub fn syntect::parsing::syntax_definition::Pattern::eq(&self, other: &syntect::
 impl core::fmt::Debug for syntect::parsing::syntax_definition::Pattern
 pub fn syntect::parsing::syntax_definition::Pattern::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 impl core::marker::StructuralPartialEq for syntect::parsing::syntax_definition::Pattern
-impl serde::ser::Serialize for syntect::parsing::syntax_definition::Pattern
-pub fn syntect::parsing::syntax_definition::Pattern::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::parsing::syntax_definition::Pattern
-pub fn syntect::parsing::syntax_definition::Pattern::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::parsing::syntax_definition::Pattern
+pub fn syntect::parsing::syntax_definition::Pattern::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::parsing::syntax_definition::Pattern
+pub fn syntect::parsing::syntax_definition::Pattern::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl !core::marker::Freeze for syntect::parsing::syntax_definition::Pattern
 impl core::marker::Send for syntect::parsing::syntax_definition::Pattern
 impl core::marker::Sync for syntect::parsing::syntax_definition::Pattern
@@ -750,10 +750,10 @@ pub fn syntect::parsing::syntax_definition::Context::eq(&self, other: &syntect::
 impl core::fmt::Debug for syntect::parsing::syntax_definition::Context
 pub fn syntect::parsing::syntax_definition::Context::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 impl core::marker::StructuralPartialEq for syntect::parsing::syntax_definition::Context
-impl serde::ser::Serialize for syntect::parsing::syntax_definition::Context
-pub fn syntect::parsing::syntax_definition::Context::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::parsing::syntax_definition::Context
-pub fn syntect::parsing::syntax_definition::Context::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::parsing::syntax_definition::Context
+pub fn syntect::parsing::syntax_definition::Context::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::parsing::syntax_definition::Context
+pub fn syntect::parsing::syntax_definition::Context::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl core::marker::Freeze for syntect::parsing::syntax_definition::Context
 impl core::marker::Send for syntect::parsing::syntax_definition::Context
 impl core::marker::Sync for syntect::parsing::syntax_definition::Context
@@ -772,10 +772,10 @@ impl core::hash::Hash for syntect::parsing::syntax_definition::ContextId
 pub fn syntect::parsing::syntax_definition::ContextId::hash<__H: core::hash::Hasher>(&self, state: &mut __H)
 impl core::marker::Copy for syntect::parsing::syntax_definition::ContextId
 impl core::marker::StructuralPartialEq for syntect::parsing::syntax_definition::ContextId
-impl serde::ser::Serialize for syntect::parsing::syntax_definition::ContextId
-pub fn syntect::parsing::syntax_definition::ContextId::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::parsing::syntax_definition::ContextId
-pub fn syntect::parsing::syntax_definition::ContextId::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::parsing::syntax_definition::ContextId
+pub fn syntect::parsing::syntax_definition::ContextId::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::parsing::syntax_definition::ContextId
+pub fn syntect::parsing::syntax_definition::ContextId::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl core::marker::Freeze for syntect::parsing::syntax_definition::ContextId
 impl core::marker::Send for syntect::parsing::syntax_definition::ContextId
 impl core::marker::Sync for syntect::parsing::syntax_definition::ContextId
@@ -813,10 +813,10 @@ pub fn syntect::parsing::syntax_definition::MatchPattern::eq(&self, other: &synt
 impl core::fmt::Debug for syntect::parsing::syntax_definition::MatchPattern
 pub fn syntect::parsing::syntax_definition::MatchPattern::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 impl core::marker::StructuralPartialEq for syntect::parsing::syntax_definition::MatchPattern
-impl serde::ser::Serialize for syntect::parsing::syntax_definition::MatchPattern
-pub fn syntect::parsing::syntax_definition::MatchPattern::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::parsing::syntax_definition::MatchPattern
-pub fn syntect::parsing::syntax_definition::MatchPattern::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::parsing::syntax_definition::MatchPattern
+pub fn syntect::parsing::syntax_definition::MatchPattern::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::parsing::syntax_definition::MatchPattern
+pub fn syntect::parsing::syntax_definition::MatchPattern::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl !core::marker::Freeze for syntect::parsing::syntax_definition::MatchPattern
 impl core::marker::Send for syntect::parsing::syntax_definition::MatchPattern
 impl core::marker::Sync for syntect::parsing::syntax_definition::MatchPattern
@@ -841,10 +841,10 @@ pub fn syntect::parsing::syntax_definition::SyntaxDefinition::eq(&self, other: &
 impl core::fmt::Debug for syntect::parsing::syntax_definition::SyntaxDefinition
 pub fn syntect::parsing::syntax_definition::SyntaxDefinition::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 impl core::marker::StructuralPartialEq for syntect::parsing::syntax_definition::SyntaxDefinition
-impl serde::ser::Serialize for syntect::parsing::syntax_definition::SyntaxDefinition
-pub fn syntect::parsing::syntax_definition::SyntaxDefinition::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::parsing::syntax_definition::SyntaxDefinition
-pub fn syntect::parsing::syntax_definition::SyntaxDefinition::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::parsing::syntax_definition::SyntaxDefinition
+pub fn syntect::parsing::syntax_definition::SyntaxDefinition::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::parsing::syntax_definition::SyntaxDefinition
+pub fn syntect::parsing::syntax_definition::SyntaxDefinition::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl core::marker::Freeze for syntect::parsing::syntax_definition::SyntaxDefinition
 impl core::marker::Send for syntect::parsing::syntax_definition::SyntaxDefinition
 impl core::marker::Sync for syntect::parsing::syntax_definition::SyntaxDefinition
@@ -882,10 +882,10 @@ impl core::fmt::Debug for syntect::parsing::ClearAmount
 pub fn syntect::parsing::ClearAmount::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 impl core::marker::Copy for syntect::parsing::ClearAmount
 impl core::marker::StructuralPartialEq for syntect::parsing::ClearAmount
-impl serde::ser::Serialize for syntect::parsing::ClearAmount
-pub fn syntect::parsing::ClearAmount::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::parsing::ClearAmount
-pub fn syntect::parsing::ClearAmount::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::parsing::ClearAmount
+pub fn syntect::parsing::ClearAmount::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::parsing::ClearAmount
+pub fn syntect::parsing::ClearAmount::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl core::marker::Freeze for syntect::parsing::ClearAmount
 impl core::marker::Send for syntect::parsing::ClearAmount
 impl core::marker::Sync for syntect::parsing::ClearAmount
@@ -1036,10 +1036,10 @@ impl core::cmp::PartialEq for syntect::parsing::Regex
 pub fn syntect::parsing::Regex::eq(&self, other: &syntect::parsing::Regex) -> bool
 impl core::fmt::Debug for syntect::parsing::Regex
 pub fn syntect::parsing::Regex::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-impl serde::ser::Serialize for syntect::parsing::Regex
-pub fn syntect::parsing::Regex::serialize<S>(&self, serializer: S) -> core::result::Result<<S as serde::ser::Serializer>::Ok, <S as serde::ser::Serializer>::Error> where S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::parsing::Regex
-pub fn syntect::parsing::Regex::deserialize<D>(deserializer: D) -> core::result::Result<Self, <D as serde::de::Deserializer>::Error> where D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::parsing::Regex
+pub fn syntect::parsing::Regex::serialize<S>(&self, serializer: S) -> core::result::Result<<S as serde_core::ser::Serializer>::Ok, <S as serde_core::ser::Serializer>::Error> where S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::parsing::Regex
+pub fn syntect::parsing::Regex::deserialize<D>(deserializer: D) -> core::result::Result<Self, <D as serde_core::de::Deserializer>::Error> where D: serde_core::de::Deserializer<'de>
 impl !core::marker::Freeze for syntect::parsing::Regex
 impl core::marker::Send for syntect::parsing::Regex
 impl core::marker::Sync for syntect::parsing::Regex
@@ -1096,10 +1096,10 @@ impl core::marker::StructuralPartialEq for syntect::parsing::Scope
 impl core::str::traits::FromStr for syntect::parsing::Scope
 pub type syntect::parsing::Scope::Err = syntect::parsing::ParseScopeError
 pub fn syntect::parsing::Scope::from_str(s: &str) -> core::result::Result<syntect::parsing::Scope, syntect::parsing::ParseScopeError>
-impl serde::ser::Serialize for syntect::parsing::Scope
-pub fn syntect::parsing::Scope::serialize<S>(&self, serializer: S) -> core::result::Result<<S as serde::ser::Serializer>::Ok, <S as serde::ser::Serializer>::Error> where S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::parsing::Scope
-pub fn syntect::parsing::Scope::deserialize<D>(deserializer: D) -> core::result::Result<Self, <D as serde::de::Deserializer>::Error> where D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::parsing::Scope
+pub fn syntect::parsing::Scope::serialize<S>(&self, serializer: S) -> core::result::Result<<S as serde_core::ser::Serializer>::Ok, <S as serde_core::ser::Serializer>::Error> where S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::parsing::Scope
+pub fn syntect::parsing::Scope::deserialize<D>(deserializer: D) -> core::result::Result<Self, <D as serde_core::de::Deserializer>::Error> where D: serde_core::de::Deserializer<'de>
 impl core::marker::Freeze for syntect::parsing::Scope
 impl core::marker::Send for syntect::parsing::Scope
 impl core::marker::Sync for syntect::parsing::Scope
@@ -1149,10 +1149,10 @@ impl core::marker::StructuralPartialEq for syntect::parsing::ScopeStack
 impl core::str::traits::FromStr for syntect::parsing::ScopeStack
 pub type syntect::parsing::ScopeStack::Err = syntect::parsing::ParseScopeError
 pub fn syntect::parsing::ScopeStack::from_str(s: &str) -> core::result::Result<syntect::parsing::ScopeStack, syntect::parsing::ParseScopeError>
-impl serde::ser::Serialize for syntect::parsing::ScopeStack
-pub fn syntect::parsing::ScopeStack::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::parsing::ScopeStack
-pub fn syntect::parsing::ScopeStack::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::parsing::ScopeStack
+pub fn syntect::parsing::ScopeStack::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::parsing::ScopeStack
+pub fn syntect::parsing::ScopeStack::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl core::marker::Freeze for syntect::parsing::ScopeStack
 impl core::marker::Send for syntect::parsing::ScopeStack
 impl core::marker::Sync for syntect::parsing::ScopeStack
@@ -1177,10 +1177,10 @@ pub fn syntect::parsing::syntax_definition::SyntaxDefinition::eq(&self, other: &
 impl core::fmt::Debug for syntect::parsing::syntax_definition::SyntaxDefinition
 pub fn syntect::parsing::syntax_definition::SyntaxDefinition::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 impl core::marker::StructuralPartialEq for syntect::parsing::syntax_definition::SyntaxDefinition
-impl serde::ser::Serialize for syntect::parsing::syntax_definition::SyntaxDefinition
-pub fn syntect::parsing::syntax_definition::SyntaxDefinition::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::parsing::syntax_definition::SyntaxDefinition
-pub fn syntect::parsing::syntax_definition::SyntaxDefinition::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::parsing::syntax_definition::SyntaxDefinition
+pub fn syntect::parsing::syntax_definition::SyntaxDefinition::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::parsing::syntax_definition::SyntaxDefinition
+pub fn syntect::parsing::syntax_definition::SyntaxDefinition::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl core::marker::Freeze for syntect::parsing::syntax_definition::SyntaxDefinition
 impl core::marker::Send for syntect::parsing::syntax_definition::SyntaxDefinition
 impl core::marker::Sync for syntect::parsing::syntax_definition::SyntaxDefinition
@@ -1198,10 +1198,10 @@ impl core::clone::Clone for syntect::parsing::SyntaxReference
 pub fn syntect::parsing::SyntaxReference::clone(&self) -> syntect::parsing::SyntaxReference
 impl core::fmt::Debug for syntect::parsing::SyntaxReference
 pub fn syntect::parsing::SyntaxReference::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-impl serde::ser::Serialize for syntect::parsing::SyntaxReference
-pub fn syntect::parsing::SyntaxReference::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::parsing::SyntaxReference
-pub fn syntect::parsing::SyntaxReference::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::parsing::SyntaxReference
+pub fn syntect::parsing::SyntaxReference::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::parsing::SyntaxReference
+pub fn syntect::parsing::SyntaxReference::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl !core::marker::Freeze for syntect::parsing::SyntaxReference
 impl core::marker::Send for syntect::parsing::SyntaxReference
 impl core::marker::Sync for syntect::parsing::SyntaxReference
@@ -1232,10 +1232,10 @@ impl core::default::Default for syntect::parsing::SyntaxSet
 pub fn syntect::parsing::SyntaxSet::default() -> Self
 impl core::fmt::Debug for syntect::parsing::SyntaxSet
 pub fn syntect::parsing::SyntaxSet::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-impl serde::ser::Serialize for syntect::parsing::SyntaxSet
-pub fn syntect::parsing::SyntaxSet::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde::ser::Serializer>::Ok, <__S as serde::ser::Serializer>::Error> where __S: serde::ser::Serializer
-impl<'de> serde::de::Deserialize<'de> for syntect::parsing::SyntaxSet
-pub fn syntect::parsing::SyntaxSet::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde::de::Deserializer>::Error> where __D: serde::de::Deserializer<'de>
+impl serde_core::ser::Serialize for syntect::parsing::SyntaxSet
+pub fn syntect::parsing::SyntaxSet::serialize<__S>(&self, __serializer: __S) -> core::result::Result<<__S as serde_core::ser::Serializer>::Ok, <__S as serde_core::ser::Serializer>::Error> where __S: serde_core::ser::Serializer
+impl<'de> serde_core::de::Deserialize<'de> for syntect::parsing::SyntaxSet
+pub fn syntect::parsing::SyntaxSet::deserialize<__D>(__deserializer: __D) -> core::result::Result<Self, <__D as serde_core::de::Deserializer>::Error> where __D: serde_core::de::Deserializer<'de>
 impl !core::marker::Freeze for syntect::parsing::SyntaxSet
 impl core::marker::Send for syntect::parsing::SyntaxSet
 impl core::marker::Sync for syntect::parsing::SyntaxSet
