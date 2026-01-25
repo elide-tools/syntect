@@ -1282,7 +1282,28 @@ impl<'a> core::marker::Sync for syntect::util::LinesWithEndings<'a>
 impl<'a> core::marker::Unpin for syntect::util::LinesWithEndings<'a>
 impl<'a> core::panic::unwind_safe::RefUnwindSafe for syntect::util::LinesWithEndings<'a>
 impl<'a> core::panic::unwind_safe::UnwindSafe for syntect::util::LinesWithEndings<'a>
+pub struct syntect::util::TerminalOptions
+pub syntect::util::TerminalOptions::background: bool
+pub syntect::util::TerminalOptions::blend_fg: bool
+impl syntect::util::TerminalOptions
+pub const syntect::util::TerminalOptions::FOREGROUND_BLENDED: Self
+pub const syntect::util::TerminalOptions::FOREGROUND_ONLY: Self
+pub const syntect::util::TerminalOptions::FULL: Self
+impl core::clone::Clone for syntect::util::TerminalOptions
+pub fn syntect::util::TerminalOptions::clone(&self) -> syntect::util::TerminalOptions
+impl core::default::Default for syntect::util::TerminalOptions
+pub fn syntect::util::TerminalOptions::default() -> syntect::util::TerminalOptions
+impl core::fmt::Debug for syntect::util::TerminalOptions
+pub fn syntect::util::TerminalOptions::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl core::marker::Copy for syntect::util::TerminalOptions
+impl core::marker::Freeze for syntect::util::TerminalOptions
+impl core::marker::Send for syntect::util::TerminalOptions
+impl core::marker::Sync for syntect::util::TerminalOptions
+impl core::marker::Unpin for syntect::util::TerminalOptions
+impl core::panic::unwind_safe::RefUnwindSafe for syntect::util::TerminalOptions
+impl core::panic::unwind_safe::UnwindSafe for syntect::util::TerminalOptions
 pub fn syntect::util::as_24_bit_terminal_escaped(v: &[(syntect::highlighting::Style, &str)], bg: bool) -> alloc::string::String
+pub fn syntect::util::as_24_bit_terminal_escaped_with_opts(v: &[(syntect::highlighting::Style, &str)], opts: syntect::util::TerminalOptions) -> alloc::string::String
 pub fn syntect::util::as_latex_escaped(v: &[(syntect::highlighting::Style, &str)]) -> alloc::string::String
 pub fn syntect::util::debug_print_ops(line: &str, ops: &[(usize, syntect::parsing::ScopeStackOp)])
 pub fn syntect::util::modify_range<'a>(v: &[(syntect::highlighting::Style, &'a str)], r: core::ops::range::Range<usize>, modifier: syntect::highlighting::StyleModifier) -> alloc::vec::Vec<(syntect::highlighting::Style, &'a str)>
