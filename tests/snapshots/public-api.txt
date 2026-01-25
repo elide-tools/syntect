@@ -1,14 +1,34 @@
 pub mod syntect
 pub mod syntect::dumps
+pub enum syntect::dumps::Error
+pub syntect::dumps::Error::Bitcode(bitcode::error::Error)
+pub syntect::dumps::Error::Io(std::io::error::Error)
+impl core::convert::From<bitcode::error::Error> for syntect::dumps::Error
+pub fn syntect::dumps::Error::from(e: bitcode::error::Error) -> Self
+impl core::convert::From<std::io::error::Error> for syntect::dumps::Error
+pub fn syntect::dumps::Error::from(e: std::io::error::Error) -> Self
+impl core::error::Error for syntect::dumps::Error
+pub fn syntect::dumps::Error::source(&self) -> core::option::Option<&(dyn core::error::Error + 'static)>
+impl core::fmt::Debug for syntect::dumps::Error
+pub fn syntect::dumps::Error::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl core::fmt::Display for syntect::dumps::Error
+pub fn syntect::dumps::Error::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl core::marker::Freeze for syntect::dumps::Error
+impl core::marker::Send for syntect::dumps::Error
+impl core::marker::Sync for syntect::dumps::Error
+impl core::marker::Unpin for syntect::dumps::Error
+impl !core::panic::unwind_safe::RefUnwindSafe for syntect::dumps::Error
+impl !core::panic::unwind_safe::UnwindSafe for syntect::dumps::Error
 pub fn syntect::dumps::dump_binary<T: serde::ser::Serialize>(o: &T) -> alloc::vec::Vec<u8>
-pub fn syntect::dumps::dump_to_file<T: serde::ser::Serialize, P: core::convert::AsRef<std::path::Path>>(o: &T, path: P) -> bincode::error::Result<()>
-pub fn syntect::dumps::dump_to_uncompressed_file<T: serde::ser::Serialize, P: core::convert::AsRef<std::path::Path>>(o: &T, path: P) -> bincode::error::Result<()>
-pub fn syntect::dumps::dump_to_writer<T: serde::ser::Serialize, W: std::io::Write>(to_dump: &T, output: W) -> bincode::error::Result<()>
+pub fn syntect::dumps::dump_to_file<T: serde::ser::Serialize, P: core::convert::AsRef<std::path::Path>>(o: &T, path: P) -> syntect::dumps::Result<()>
+pub fn syntect::dumps::dump_to_uncompressed_file<T: serde::ser::Serialize, P: core::convert::AsRef<std::path::Path>>(o: &T, path: P) -> syntect::dumps::Result<()>
+pub fn syntect::dumps::dump_to_writer<T: serde::ser::Serialize, W: std::io::Write>(to_dump: &T, output: W) -> syntect::dumps::Result<()>
 pub fn syntect::dumps::from_binary<T: serde::de::DeserializeOwned>(v: &[u8]) -> T
-pub fn syntect::dumps::from_dump_file<T: serde::de::DeserializeOwned, P: core::convert::AsRef<std::path::Path>>(path: P) -> bincode::error::Result<T>
-pub fn syntect::dumps::from_reader<T: serde::de::DeserializeOwned, R: std::io::BufRead>(input: R) -> bincode::error::Result<T>
-pub fn syntect::dumps::from_uncompressed_data<T: serde::de::DeserializeOwned>(v: &[u8]) -> bincode::error::Result<T>
-pub fn syntect::dumps::from_uncompressed_dump_file<T: serde::de::DeserializeOwned, P: core::convert::AsRef<std::path::Path>>(path: P) -> bincode::error::Result<T>
+pub fn syntect::dumps::from_dump_file<T: serde::de::DeserializeOwned, P: core::convert::AsRef<std::path::Path>>(path: P) -> syntect::dumps::Result<T>
+pub fn syntect::dumps::from_reader<T: serde::de::DeserializeOwned, R: std::io::Read>(input: R) -> syntect::dumps::Result<T>
+pub fn syntect::dumps::from_uncompressed_data<T: serde::de::DeserializeOwned>(v: &[u8]) -> syntect::dumps::Result<T>
+pub fn syntect::dumps::from_uncompressed_dump_file<T: serde::de::DeserializeOwned, P: core::convert::AsRef<std::path::Path>>(path: P) -> syntect::dumps::Result<T>
+pub type syntect::dumps::Result<T> = core::result::Result<T, syntect::dumps::Error>
 pub mod syntect::easy
 pub struct syntect::easy::HighlightFile<'a>
 pub syntect::easy::HighlightFile::highlight_lines: syntect::easy::HighlightLines<'a>
