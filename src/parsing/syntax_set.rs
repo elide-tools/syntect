@@ -502,6 +502,13 @@ impl SyntaxReference {
         self.lazy_contexts
             .get_or_init(|| LazyContexts::deserialize(&self.serialized_lazy_contexts[..]))
     }
+
+    /// Returns the serialized (compressed) lazy contexts data.
+    ///
+    /// This is useful for dictionary training when building custom syntax sets.
+    pub fn serialized_contexts(&self) -> &[u8] {
+        &self.serialized_lazy_contexts
+    }
 }
 
 impl LazyContexts {

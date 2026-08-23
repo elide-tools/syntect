@@ -26,6 +26,37 @@ fn blend_fg_color(fg: Color, bg: Color) -> Color {
     }
 }
 
+/// Options for terminal escape code rendering.
+#[derive(Debug, Clone, Copy, Default)]
+pub struct TerminalOptions {
+    /// If true, emit background color escape codes.
+    pub background: bool,
+    /// If true, blend semi-transparent foreground colors with the theme background.
+    /// If false, use the raw foreground color (useful when your terminal background
+    /// differs from the theme background).
+    pub blend_fg: bool,
+}
+
+impl TerminalOptions {
+    /// Emit only foreground colors without blending (for use with terminal's native background).
+    pub const FOREGROUND_ONLY: Self = Self {
+        background: false,
+        blend_fg: false,
+    };
+
+    /// Emit foreground colors blended with theme background, but don't set terminal background.
+    pub const FOREGROUND_BLENDED: Self = Self {
+        background: false,
+        blend_fg: true,
+    };
+
+    /// Emit both foreground and background colors (full theme rendering).
+    pub const FULL: Self = Self {
+        background: true,
+        blend_fg: true,
+    };
+}
+
 /// Formats the styled fragments using 24-bit color terminal escape codes.
 /// Meant for debugging and testing.
 ///
@@ -37,9 +68,28 @@ fn blend_fg_color(fg: Color, bg: Color) -> Color {
 ///
 /// If `bg` is true then the background is also set
 pub fn as_24_bit_terminal_escaped(v: &[(Style, &str)], bg: bool) -> String {
+    let opts = if bg {
+        TerminalOptions::FULL
+    } else {
+        TerminalOptions::FOREGROUND_BLENDED
+    };
+    as_24_bit_terminal_escaped_with_opts(v, opts)
+}
+
+/// Formats the styled fragments using 24-bit color terminal escape codes with configurable options.
+///
+/// Use [`TerminalOptions`] to control background color emission and foreground blending:
+/// - `TerminalOptions::FOREGROUND_ONLY`: Pure foreground colors, no blending (best for terminal's native background)
+/// - `TerminalOptions::FOREGROUND_BLENDED`: Foreground blended with theme background, no background escape codes
+/// - `TerminalOptions::FULL`: Full theme rendering with both foreground and background colors
+///
+/// Note that this does not currently ever un-set the color so that the end of a line will also get
+/// highlighted with the background. This means you might want to use `println!("\x1b[0m");`
+/// after to clear the coloring.
+pub fn as_24_bit_terminal_escaped_with_opts(v: &[(Style, &str)], opts: TerminalOptions) -> String {
     let mut s: String = String::new();
     for &(ref style, text) in v.iter() {
-        if bg {
+        if opts.background {
             write!(
                 s,
                 "\x1b[48;2;{};{};{}m",
@@ -47,7 +97,11 @@ pub fn as_24_bit_terminal_escaped(v: &[(Style, &str)], bg: bool) -> String {
             )
             .unwrap();
         }
-        let fg = blend_fg_color(style.foreground, style.background);
+        let fg = if opts.blend_fg {
+            blend_fg_color(style.foreground, style.background)
+        } else {
+            style.foreground
+        };
         write!(s, "\x1b[38;2;{};{};{}m{}", fg.r, fg.g, fg.b, text).unwrap();
     }
     // s.push_str("\x1b[0m");
@@ -412,5 +466,35 @@ mod tests {
         };
         let s = as_24_bit_terminal_escaped(&[(style, "hello")], true);
         assert_eq!(s, "\x1b[48;2;0;0;0m\x1b[38;2;128;128;128mhello");
+    }
+
+    #[test]
+    fn test_as_24_bit_terminal_escaped_with_opts() {
+        // Test with semi-transparent foreground against non-black background
+        let mut foreground = Color::WHITE;
+        foreground.a = 128;
+        let style = Style {
+            foreground,
+            background: Color {
+                r: 100,
+                g: 100,
+                b: 100,
+                a: 255,
+            },
+            font_style: FontStyle::default(),
+        };
+
+        // FOREGROUND_ONLY: raw foreground color, no blending
+        let s = as_24_bit_terminal_escaped_with_opts(&[(style, "hello")], TerminalOptions::FOREGROUND_ONLY);
+        assert_eq!(s, "\x1b[38;2;255;255;255mhello");
+
+        // FOREGROUND_BLENDED: blended with background (128/255 white + 127/255 gray)
+        let s = as_24_bit_terminal_escaped_with_opts(&[(style, "hello")], TerminalOptions::FOREGROUND_BLENDED);
+        // (255 * 128 + 100 * (255 - 128)) / 255 = 177
+        assert_eq!(s, "\x1b[38;2;177;177;177mhello");
+
+        // FULL: blended foreground + background escape codes
+        let s = as_24_bit_terminal_escaped_with_opts(&[(style, "hello")], TerminalOptions::FULL);
+        assert_eq!(s, "\x1b[48;2;100;100;100m\x1b[38;2;177;177;177mhello");
     }
 }

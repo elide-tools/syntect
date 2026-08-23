@@ -21,6 +21,28 @@ packs: $(SUBMODULES)
 themes: $(SUBMODULES)
 	cargo run --example gendata -- themepack testdata assets/default.themedump
 
+# --- elide fork: per-compression-backend assets -----------------------------
+# `dump_to_file` (themedumps) routes through `crate::compression`, so each
+# backend needs its own dump. The zstd/lz4 backends compress against a trained
+# dictionary, so `dicts` must run — and the crate be rebuilt — before `themes-*`.
+BACKEND_ASSETS = dicts packs-flate2 themes-flate2 packs-zstd themes-zstd packs-lz4 themes-lz4
+
+backend-assets: $(BACKEND_ASSETS)
+
+dicts: $(SUBMODULES)
+	cargo run --no-default-features --features metadata,default-fancy,compression-zstd,compression-lz4 \
+		--example gendata -- dictgen testdata/Packages assets/syntax_zstd.dict assets/syntax_lz4.dict
+
+packs-%: $(SUBMODULES)
+	cargo run --no-default-features --features metadata,default-fancy,compression-$* \
+		--example gendata -- synpack testdata/Packages \
+		assets/default_newlines.$*.packdump assets/default_nonewlines.$*.packdump \
+		assets/default_metadata.packdump testdata/DefaultPackage
+
+themes-%: $(SUBMODULES)
+	cargo run --no-default-features --features metadata,default-fancy,compression-$* \
+		--example gendata -- themepack testdata assets/default.$*.themedump
+
 syntest: $(SUBMODULES)
 	@echo Tip: Run make update-known-failures to update the known failures file.
 	cargo run --release --example syntest -- testdata/Packages testdata/Packages --summary | diff -U 1000000 testdata/known_syntest_failures.txt -

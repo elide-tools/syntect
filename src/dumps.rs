@@ -17,16 +17,6 @@ use crate::highlighting::ThemeSet;
 #[cfg(feature = "default-syntaxes")]
 use crate::parsing::SyntaxSet;
 #[cfg(feature = "dump-load")]
-use bincode::deserialize_from;
-#[cfg(feature = "dump-create")]
-use bincode::serialize_into;
-#[cfg(feature = "dump-load")]
-use flate2::bufread::ZlibDecoder;
-#[cfg(feature = "dump-create")]
-use flate2::write::ZlibEncoder;
-#[cfg(feature = "dump-create")]
-use flate2::Compression;
-#[cfg(feature = "dump-load")]
 use serde::de::DeserializeOwned;
 #[cfg(feature = "dump-create")]
 use serde::ser::Serialize;
@@ -51,7 +41,7 @@ pub enum DumpError {
 
 /// Dumps an object to the given writer in a compressed binary format
 ///
-/// The writer is encoded with the `bincode` crate and compressed with `flate2`.
+/// The writer is encoded with the `bitcode` crate and compressed with the selected compression backend.
 #[cfg(feature = "dump-create")]
 pub fn dump_to_writer<T: Serialize, W: Write>(to_dump: &T, output: W) -> Result<(), DumpError> {
     serialize_to_writer_impl(to_dump, output, true)
@@ -70,7 +60,7 @@ pub fn dump_binary<T: Serialize>(o: &T) -> Vec<u8> {
 /// Dumps an encodable object to a file at a given path, in the same format as [`dump_to_writer`]
 ///
 /// If a file already exists at that path it will be overwritten. The files created are encoded with
-/// the `bincode` crate and then compressed with the `flate2` crate.
+/// the `bitcode` crate and then compressed with the selected compression backend.
 ///
 /// [`dump_to_writer`]: fn.dump_to_writer.html
 #[cfg(feature = "dump-create")]
@@ -135,15 +125,17 @@ pub fn from_uncompressed_data<T: DeserializeOwned>(v: &[u8]) -> Result<T, DumpEr
 #[cfg(feature = "dump-create")]
 fn serialize_to_writer_impl<T: Serialize, W: Write>(
     to_dump: &T,
-    output: W,
+    mut output: W,
     use_compression: bool,
 ) -> Result<(), DumpError> {
-    if use_compression {
-        let mut encoder = std::io::BufWriter::new(ZlibEncoder::new(output, Compression::best()));
-        serialize_into(&mut encoder, to_dump).map_err(|e| DumpError::Serialize(Box::new(e)))
+    let encoded = bitcode::serialize(to_dump).map_err(|e| DumpError::Serialize(Box::new(e)))?;
+    let bytes = if use_compression {
+        crate::compression::compress(&encoded)?
     } else {
-        serialize_into(output, to_dump).map_err(|e| DumpError::Serialize(Box::new(e)))
-    }
+        encoded
+    };
+    output.write_all(&bytes)?;
+    Ok(())
 }
 
 /// Private low level helper function used to implement the public API.
@@ -152,12 +144,86 @@ fn deserialize_from_reader_impl<T: DeserializeOwned, R: BufRead>(
     input: R,
     use_compression: bool,
 ) -> Result<T, DumpError> {
-    if use_compression {
-        let mut decoder = ZlibDecoder::new(input);
-        deserialize_from(&mut decoder).map_err(|e| DumpError::Serialize(Box::new(e)))
+    let mut raw = Vec::new();
+    let mut input = input;
+    input.read_to_end(&mut raw)?;
+    let bytes = if use_compression {
+        crate::compression::decompress(&raw)?
     } else {
-        deserialize_from(input).map_err(|e| DumpError::Serialize(Box::new(e)))
-    }
+        raw
+    };
+    bitcode::deserialize(&bytes).map_err(|e| DumpError::Serialize(Box::new(e)))
+}
+
+// Macros to select the correct packdump based on compression backend
+// Priority: zstd > lz4 > flate2
+#[cfg(feature = "compression-zstd")]
+macro_rules! default_newlines_packdump {
+    () => {
+        include_bytes!("../assets/default_newlines.zstd.packdump")
+    };
+}
+#[cfg(all(feature = "compression-lz4", not(feature = "compression-zstd")))]
+macro_rules! default_newlines_packdump {
+    () => {
+        include_bytes!("../assets/default_newlines.lz4.packdump")
+    };
+}
+#[cfg(all(
+    feature = "compression-flate2",
+    not(feature = "compression-zstd"),
+    not(feature = "compression-lz4")
+))]
+macro_rules! default_newlines_packdump {
+    () => {
+        include_bytes!("../assets/default_newlines.flate2.packdump")
+    };
+}
+
+#[cfg(feature = "compression-zstd")]
+macro_rules! default_nonewlines_packdump {
+    () => {
+        include_bytes!("../assets/default_nonewlines.zstd.packdump")
+    };
+}
+#[cfg(all(feature = "compression-lz4", not(feature = "compression-zstd")))]
+macro_rules! default_nonewlines_packdump {
+    () => {
+        include_bytes!("../assets/default_nonewlines.lz4.packdump")
+    };
+}
+#[cfg(all(
+    feature = "compression-flate2",
+    not(feature = "compression-zstd"),
+    not(feature = "compression-lz4")
+))]
+macro_rules! default_nonewlines_packdump {
+    () => {
+        include_bytes!("../assets/default_nonewlines.flate2.packdump")
+    };
+}
+
+#[cfg(feature = "compression-zstd")]
+macro_rules! default_themedump {
+    () => {
+        include_bytes!("../assets/default.zstd.themedump")
+    };
+}
+#[cfg(all(feature = "compression-lz4", not(feature = "compression-zstd")))]
+macro_rules! default_themedump {
+    () => {
+        include_bytes!("../assets/default.lz4.themedump")
+    };
+}
+#[cfg(all(
+    feature = "compression-flate2",
+    not(feature = "compression-zstd"),
+    not(feature = "compression-lz4")
+))]
+macro_rules! default_themedump {
+    () => {
+        include_bytes!("../assets/default.flate2.themedump")
+    };
 }
 
 #[cfg(feature = "default-syntaxes")]
@@ -176,7 +242,7 @@ impl SyntaxSet {
     /// significantly faster than loading the YAML files.
     ///
     /// Note that you can load additional syntaxes after doing this. If you want you can even use
-    /// the fact that SyntaxDefinitions are serializable with the bincode crate to cache dumps of
+    /// the fact that SyntaxDefinitions are serializable with the bitcode crate to cache dumps of
     /// additional syntaxes yourself.
     ///
     /// [`load_defaults_newlines`]: #method.load_defaults_nonewlines
@@ -185,7 +251,7 @@ impl SyntaxSet {
         #[cfg(feature = "metadata")]
         {
             let mut ps: SyntaxSet =
-                from_uncompressed_data(include_bytes!("../assets/default_nonewlines.packdump"))
+                from_uncompressed_data(default_nonewlines_packdump!())
                     .unwrap();
             let metadata = from_binary(include_bytes!("../assets/default_metadata.packdump"));
             ps.metadata = metadata;
@@ -193,7 +259,7 @@ impl SyntaxSet {
         }
         #[cfg(not(feature = "metadata"))]
         {
-            from_uncompressed_data(include_bytes!("../assets/default_nonewlines.packdump")).unwrap()
+            from_uncompressed_data(default_nonewlines_packdump!()).unwrap()
         }
     }
 
@@ -207,7 +273,7 @@ impl SyntaxSet {
         #[cfg(feature = "metadata")]
         {
             let mut ps: SyntaxSet =
-                from_uncompressed_data(include_bytes!("../assets/default_newlines.packdump"))
+                from_uncompressed_data(default_newlines_packdump!())
                     .unwrap();
             let metadata = from_binary(include_bytes!("../assets/default_metadata.packdump"));
             ps.metadata = metadata;
@@ -215,7 +281,7 @@ impl SyntaxSet {
         }
         #[cfg(not(feature = "metadata"))]
         {
-            from_uncompressed_data(include_bytes!("../assets/default_newlines.packdump")).unwrap()
+            from_uncompressed_data(default_newlines_packdump!()).unwrap()
         }
     }
 }
@@ -229,7 +295,7 @@ impl ThemeSet {
     /// - `InspiredGitHub` from [here](https://github.com/sethlopezme/InspiredGitHub.tmtheme)
     /// - `Solarized (dark)` and `Solarized (light)`
     pub fn load_defaults() -> ThemeSet {
-        from_binary(include_bytes!("../assets/default.themedump"))
+        from_binary(default_themedump!())
     }
 }
 
