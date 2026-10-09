@@ -30,7 +30,7 @@ regex-syntax = { version = "0.8", optional = true }
 plist = { version = "1.8", optional = true }
 bitcode = { version = "0.6", optional = true, features = ["serde"] }
 flate2 = { version = "1.1", optional = true }
-zstd = { version = "0.13", optional = true }
+zstd = { version = "0.14", optional = true }
 lz4_flex = { version = "0.12", optional = true }
 fnv = { version = "1.0", optional = true }
 serde = "1.0"
